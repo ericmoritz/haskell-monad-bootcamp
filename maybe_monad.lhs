@@ -19,8 +19,7 @@ query parameter than may or may not be there:
 > query_by_qs qs = do
 >   id <- lookup "id" qs
 >   lookup id database
-
-
+>
 > maybeExample :: IO ()
 > maybeExample = do
 >   -- Just "Eric"
