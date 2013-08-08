@@ -2,6 +2,8 @@
 > import Data.Char
 > import Data.List
 > import Control.Monad
+> import System.Environment
+> import BootCamp
 
 This is my hope to become a Monad ninja.  Starting with elementary manipulation up to use of Monad transformers.
 
@@ -122,6 +124,68 @@ the nested IO monads causes the outer IO action to be executed:
 
 Skipping msum and mfilter because IO is not an instance of MonadPlus
 
+filterM
+-----------
+
+filterM is for filtering a list using an (a -> m Bool) function
+
+
+> ioIsUpper :: Char -> IO Bool
+> ioIsUpper = return . isUpper
+
+> main9 = do
+>   x <- filterM ioIsUpper "aBcD"
+>   putStrLn $ show x
+
+mapAndUnzipM, zipWithM, foldM, replicateM are self explainitory.
+
+Conditional execution of monadic expressions
+----------------------------------------------
+
+The IO monad is not an instance of MonadPlus, so we can't use guard with it.
+
+> whenTest :: IO ()
+> whenTest = do
+>   when True (putStrLn "Now you see me")
+>   when False (putStrLn "Now you don't")
+
+Unless is the opposite of when:
+
+> unlessTest :: IO ()
+> unlessTest = do
+>   unless False (putStrLn "Now you see me")
+>   unless True  (putStrLn "Now you now you don't")
+
+Monadic lifting operators
+--------------------------
+
+Lifting functions is helpful for composing regular functions with monads.
+
+So if you have a function like:
+
+> strToUpper :: String -> String
+> strToUpper = map toUpper
+
+You can create an IO action using that function:
+
+> ioStrToUpper :: IO String -> IO String
+> ioStrToUpper = liftM strToUpper
+
+This is helpful in isolating pure functions from your side effecting code:
+
+> liftMTest :: IO ()
+> liftMTest = ioShow $ liftM strToUpper (getEnv "PWD")
+
+liftM2 and the rest of the liftMn functions are used for
+lifting functions of n-arity:
+
+> liftM2Test :: IO ()
+> liftM2Test = ioShow $
+>              liftM2 (++) (ioString "Hello, ") (ioString "World")
+
+`ap` takes a function than is in an IO monad and applies the
+function to the value in the IO monad.  I can't really think of
+a good use of ap for an IO monad.
 
 > main = do
 >   wrap "main1" main1
@@ -132,10 +196,9 @@ Skipping msum and mfilter because IO is not an instance of MonadPlus
 >   wrap "main6" main6
 >   wrap "main7" main7
 >   wrap "main8" main8
+>   wrap "main9" main9
+>   wrap "whenTest" whenTest
+>   wrap "unlessTest" unlessTest
+>   wrap "liftMTest" liftMTest
+>   wrap "liftM2Test" liftM2Test
 
-> wrap :: String -> IO () -> IO ()
-> wrap name f = do
->   putStrLn ""
->   putStrLn $ name ++ "{"
->   f
->   putStrLn $ "}" ++ name
