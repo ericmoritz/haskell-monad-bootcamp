@@ -81,11 +81,11 @@ This will return Nothing if all the values are Nothing:
 >   trace $ sequence [Just 1, Just 2] 
 
 
- >=> 
+Monadic function compositon
 -------------------------------------------------------------------
 
-Lets use compose a (a -> Maybe a) and an (b -> Maybe c) into an
-(a -> Maybe c) function:
+The >=> and <=< functions let use compose a (a -> Maybe a) and an (b
+-> Maybe c) into an (a -> Maybe c) function:
 
 This allows us to build point free versions of these types of functions.
 
