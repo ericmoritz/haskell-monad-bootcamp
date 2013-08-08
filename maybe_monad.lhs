@@ -22,13 +22,8 @@ query parameter than may or may not be there:
 >
 > maybeExample :: IO ()
 > maybeExample = do
->   -- Just "Eric"
 >   trace $ query_by_qs [("id", 1)]
-> 
->   -- Nothing because the param is missing
 >   trace $ query_by_qs []          
->
->   -- Nothing because 3 is not in the "database"
 >   trace $ query_by_qs [("id", 3)]
 
 
