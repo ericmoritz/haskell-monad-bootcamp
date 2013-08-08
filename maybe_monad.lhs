@@ -37,14 +37,14 @@ we can also eliminate the do keyword and make query_by_qs simplier
 
 > query_by_qs2 :: [(String, Int)] -> Maybe String
 > query_by_qs2 qs = lookup "id" qs >>= flip lookup database
->
+
 
 If lookup succeeds, >>= will feed the value of "id" into the flipped
 lookup function.  I had to flip lookup because normally the list is in
 the 2nd position and I needed a function that took the key in the 2nd
 position.
 
->
+
 > maybeExample2 :: IO ()
 > maybeExample2 = do
 >   -- Just "Eric"
