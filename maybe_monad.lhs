@@ -49,10 +49,8 @@ position.
 > maybeExample2 = do
 >   -- Just "Eric"
 >   trace $ query_by_qs2 [("id", 1)]
-> 
 >   -- Nothing because the param is missing
 >   trace $ query_by_qs2 []          
->
 >   -- Nothing because 3 is not in the "database"
 >   trace $ query_by_qs2 [("id", 3)]
 
